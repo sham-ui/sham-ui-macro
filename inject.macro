@@ -1,0 +1,51 @@
+/* eslint-env node */
+'use strict';
+const { createMacro } = require( 'babel-macros' );
+const t = require( 'babel-types' );
+const Imports = require( './utils/imports' );
+
+module.exports = createMacro( inject );
+
+function inject( { references } ) {
+    references.default.forEach( referencePath => {
+        asDecorator( referencePath.findParent( x => x.isDecorator() ) );
+    } );
+}
+
+function asDecorator( decoratorPath ) {
+    const parentPath = decoratorPath.parentPath;
+    if ( !parentPath.isClassProperty() ) {
+        throw new Error( `Only ClassProperty allow, get "${parentPath.node.type}"` );
+    }
+
+    const imports = new Imports( parentPath );
+    const DI = imports.addImport( 'DI' );
+
+    let name;
+    if ( t.isCallExpression( decoratorPath.node.expression ) ) {
+        name = decoratorPath.node.expression.arguments[ 0 ];
+    } else {
+        name = t.stringLiteral( parentPath.node.key.name );
+    }
+
+    parentPath.replaceWith(
+        t.classMethod(
+            'get',
+            parentPath.node.key,
+            [],
+            t.blockStatement( [
+                t.returnStatement(
+                    t.callExpression(
+                        t.memberExpression(
+                            t.identifier( DI ),
+                            t.identifier( 'resolve' )
+                        ),
+                        [ name ]
+                    )
+                )
+            ] )
+        )
+    );
+}
+
+

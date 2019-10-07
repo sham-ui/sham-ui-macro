@@ -1,0 +1,36 @@
+{
+  "name": "sham-ui-macro",
+  "version": "1.0.0",
+  "description": "Babel macros for sham-ui",
+  "keywords": [
+    "babel-macros",
+    "errors",
+    "debug"
+  ],
+  "main": "index.js",
+  "author": "sham",
+  "repository": "https://github.com/sham-ui/sham-ui-macro",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --coverage",
+    "test:watch": "jest --watchAll",
+    "doc:generate": "documentation readme *.macro --section=API",
+    "doc:lint": "documentation lint *.macro"
+  },
+  "dependencies": {
+    "babel-macros": "^1.0.2",
+    "babel-types": "^6.26.0",
+    "babel-generator": "^6.26.1"
+  },
+  "devDependencies": {
+    "babel-generator": "^6.26.1",
+    "babel-plugin-tester": "^5.0.0",
+    "babel-plugin-macros": "^2.2.1",
+    "documentation": "^12.1.2",
+    "eslint": "^5.16.0",
+    "eslint-plugin-jest": "^22.6.4",
+    "jest": "^23.6.0",
+    "jest-runner-eslint": "^0.7.4",
+    "prettier": "^1.18.2"
+  }
+}

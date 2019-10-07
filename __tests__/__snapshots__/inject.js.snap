@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`macros @inject store: @inject store 1`] = `
+
+import inject from '../inject.macro'
+
+class FooComponent extends Template {
+    @inject store;
+}
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { DI } from 'sham-ui';
+
+
+class FooComponent extends Template {
+    get store() {
+        return DI.resolve('store');
+    }
+
+}
+
+`;
+
+exports[`macros @inject('sham-ui:store') store: @inject('sham-ui:store') store 1`] = `
+
+import inject from '../inject.macro'
+
+class FooComponent extends Template {
+    @inject('sham-ui:store') store
+}
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { DI } from 'sham-ui';
+
+
+class FooComponent extends Template {
+    get store() {
+        return DI.resolve('sham-ui:store');
+    }
+
+}
+
+`;

@@ -1,0 +1,9 @@
+/src/
+/__tests__/
+/e2e/
+/coverage/
+.travis.yml
+.eslintrc.js
+.idea
+yarn-error.log
+.travis.yml
