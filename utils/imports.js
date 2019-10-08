@@ -22,7 +22,7 @@ module.exports = class Imports {
                 if ( p.isImportDeclaration() && p.node.source.value === 'sham-ui' ) {
                     this.importPath = p;
                     p.node.specifiers.forEach(
-                        sp => this.imports.set( sp.node.imported.name, sp.node.local.name )
+                        sp => this.imports.set( sp.imported.name, sp.local.name )
                     );
                 }
             } );

@@ -1,18 +1,40 @@
-/* eslint-env node */
-'use strict';
-const { createMacro } = require( 'babel-macros' );
 const t = require( 'babel-types' );
-const Imports = require( './utils/imports' );
+const Imports = require( '../utils/imports' );
 
-module.exports = createMacro( inject );
+/**
+ * Macro for `DI.resolve`
+ * @function inject
+ * @param {string} [name] Name of injected item
+ *
+ * @example
+ * import { inject } from 'sham-ui-macro/babel.macro';
+ * class Service {
+ *     \@inject api;
+ *     \@inject( 'sham-ui:store' ) uiStore;
+ * }
+ *
+ *
+ * // ↓ ↓ ↓ ↓ ↓ ↓
+ *
+ * import { DI } from 'sham-ui';
+ *
+ * class Service {
+ *    get api() {
+ *        return DI.resolve('api');
+ *    }
+ *
+ *    get uiStore() {
+ *        return DI.resolve('sham-ui:store');
+ *    }
+ *
+ * }
+ */
 
-function inject( { references } ) {
-    references.default.forEach( referencePath => {
-        asDecorator( referencePath.findParent( x => x.isDecorator() ) );
-    } );
-}
-
-function asDecorator( decoratorPath ) {
+/**
+ * @param {BabelPath} decoratorPath
+ * @private
+ */
+module.exports = function inject( decoratorPath ) {
     const parentPath = decoratorPath.parentPath;
     if ( !parentPath.isClassProperty() ) {
         throw new Error( `Only ClassProperty allow, get "${parentPath.node.type}"` );
@@ -46,6 +68,4 @@ function asDecorator( decoratorPath ) {
             ] )
         )
     );
-}
-
-
+};

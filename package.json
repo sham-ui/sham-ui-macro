@@ -14,8 +14,8 @@
   "scripts": {
     "test": "jest --coverage",
     "test:watch": "jest --watchAll",
-    "doc:generate": "documentation readme *.macro --section=API",
-    "doc:lint": "documentation lint *.macro"
+    "doc:generate": "documentation readme babel.macro --section=API",
+    "doc:lint": "documentation lint *.macro index.js"
   },
   "dependencies": {
     "babel-macros": "^1.0.2",
@@ -23,6 +23,7 @@
     "babel-generator": "^6.26.1"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.2",
     "babel-generator": "^6.26.1",
     "babel-plugin-tester": "^5.0.0",
     "babel-plugin-macros": "^2.2.1",
@@ -32,5 +33,22 @@
     "jest": "^23.6.0",
     "jest-runner-eslint": "^0.7.4",
     "prettier": "^1.18.2"
+  },
+  "jest": {
+    "projects": [
+      {
+        "displayName": "test"
+      },
+      {
+        "runner": "jest-runner-eslint",
+        "displayName": "lint",
+        "testMatch": [
+          "<rootDir>/macros/**/*.js",
+          "<rootDir>/utils/**/*.js",
+          "<rootDir>/__tests__/**/*.js",
+          "<rootDir>/babel.macro"
+        ]
+      }
+    ]
   }
 }

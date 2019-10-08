@@ -2,7 +2,7 @@
 
 exports[`macros @inject store: @inject store 1`] = `
 
-import inject from '../inject.macro'
+import { inject } from '../babel.macro';
 
 class FooComponent extends Template {
     @inject store;
@@ -24,7 +24,7 @@ class FooComponent extends Template {
 
 exports[`macros @inject('sham-ui:store') store: @inject('sham-ui:store') store 1`] = `
 
-import inject from '../inject.macro'
+import { inject } from '../babel.macro';
 
 class FooComponent extends Template {
     @inject('sham-ui:store') store
@@ -37,6 +37,58 @@ import { DI } from 'sham-ui';
 
 class FooComponent extends Template {
     get store() {
+        return DI.resolve('sham-ui:store');
+    }
+
+}
+
+`;
+
+exports[`macros with imported DI as alias: with imported DI as alias 1`] = `
+
+import { DI as di } from 'sham-ui'; 
+import { inject } from '../babel.macro';
+class Service {
+    @inject api;
+    @inject( 'sham-ui:store' ) uiStore;
+}
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { DI as di } from 'sham-ui';
+
+class Service {
+    get api() {
+        return di.resolve('api');
+    }
+
+    get uiStore() {
+        return di.resolve('sham-ui:store');
+    }
+
+}
+
+`;
+
+exports[`macros with imported DI: with imported DI 1`] = `
+
+import { DI } from 'sham-ui'; 
+import { inject } from '../babel.macro';
+class Service {
+    @inject api;
+    @inject( 'sham-ui:store' ) uiStore;
+}
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { DI } from 'sham-ui';
+
+class Service {
+    get api() {
+        return DI.resolve('api');
+    }
+
+    get uiStore() {
         return DI.resolve('sham-ui:store');
     }
 
