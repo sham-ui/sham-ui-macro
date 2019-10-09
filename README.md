@@ -22,6 +22,8 @@ And add `babel-macros` plugin to your babel config.
 -   [inject](#inject)
     -   [Parameters](#parameters)
     -   [Examples](#examples)
+-   [options](#options)
+    -   [Examples](#examples-1)
 
 #### inject
 
@@ -54,5 +56,61 @@ class Service {
        return DI.resolve('sham-ui:store');
    }
 
+}
+```
+
+#### options
+
+Macro for sham-ui `@options`. Replace decorator with `configureOptions` method
+
+##### Examples
+
+```javascript
+import { options } from 'sham-ui-macro/babel.macro';
+class FooComponent extends Template {
+    @options submitText = 'Submit';
+    @options loaded = false;
+    @options errors = [];
+    @options get startDate() {
+        return new Date();
+    }
+    @options data = {};
+    @options onLoad() {};
+
+    @options get text() {
+        return this._text;
+    }
+    @options set text( value ) {
+        this._text = value;
+    }
+}
+
+// ↓ ↓ ↓ ↓ ↓ ↓
+
+import { configureOptions } from 'sham-ui';
+class FooComponent extends Template {
+    configureOptions() {
+        super.configureOptions( ...arguments );
+        configureOptions( FooComponent.prototype, this, {
+            submitText: 'Submit',
+            loaded: false,
+            errors: [],
+            startDate: {
+                get() {
+                    return new Date();
+                }
+            },
+            data: {},
+            onLoad() {},
+            text: {
+                get() {
+                    return this._text;
+                },
+                set( value ) {
+                    this._text = value;
+                }
+            }
+       } );
+   }
 }
 ```
