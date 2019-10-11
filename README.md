@@ -1,6 +1,6 @@
 # sham-ui-macro
 
-[![Build Status](https://travis-ci.org/shamcode/sham-ui-macro.svg?branch=master)](https://travis-ci.org/shamcode/sham-ui-macro)
+[![Build Status](https://travis-ci.org/sham-ui/sham-ui-macro.svg?branch=master)](https://travis-ci.org/shamcode/sham-ui-macro)
 [![npm version](https://badge.fury.io/js/sham-ui-macro.svg)](https://badge.fury.io/js/sham-ui-macro)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
@@ -9,7 +9,7 @@ Babel macros for `sham-ui`.
 ### Install
 
 Install from yarn:
-`yadn add sham-ui --dev`
+`yadn add sham-ui-macro --dev`
 
 And add `babel-macros` plugin to your babel config. 
 
@@ -24,6 +24,8 @@ And add `babel-macros` plugin to your babel config.
     -   [Examples](#examples)
 -   [options](#options)
     -   [Examples](#examples-1)
+-   [mergeWithTemplate](#mergewithtemplate)
+    -   [Examples](#examples-2)
 
 #### inject
 
@@ -112,5 +114,108 @@ class FooComponent extends Template {
             }
        } );
    }
+}
+```
+
+#### mergeWithTemplate
+
+Merge component class with template class.
+
+##### Examples
+
+```javascript
+import { mergeWithTemplate } from 'sham-ui-macro/babel.macro';
+
+class Template extends __UI__.Component {
+    constructor( options ) {
+        super( options );
+
+        // Create elements
+        const div0 = document.createElement( 'div' );
+        const text1 = document.createTextNode( '' );
+
+        // Construct dom
+        div0.appendChild( document.createTextNode( " Content " ) );
+        div0.appendChild( text1 );
+
+        // Update functions
+        this.__update__ = {
+            text( text ) {
+                text1.textContent = text;
+            }
+        };
+
+        // Set root nodes
+        this.nodes = [ div0 ];
+    }
+
+    updateSpots( __data__ ) {
+        if ( __data__.text !== undefined ) {
+            this.__update__.text( __data__.text );
+        }
+    }
+}
+
+@mergeWithTemplate
+class dummy extends Template {
+    @options text = 'default text';
+    @options get startDate() {
+        return new Date();
+    }
+
+    constructor() {
+        super( ...arguments );
+        console.log( 'constructor called' );
+    }
+
+    updateSpots() {
+        console.log( 'before update spots' );
+        super.updateSpots(  ...arguments );
+        console.log( 'spots updated' );
+    }
+}
+
+// ↓ ↓ ↓ ↓ ↓ ↓
+
+class dummy extends __UI__.Component {
+    @options text = 'default text';
+
+    constructor( options ) {
+        super(options);
+
+        // Create elements
+        const div0 = document.createElement( 'div' );
+        const text1 = document.createTextNode( '' );
+
+        // Construct dom
+        div0.appendChild( document.createTextNode( " Content " ) );
+        div0.appendChild( text1 );
+
+        // Update functions
+        this.__update__ = {
+            text( text ) {
+                text1.textContent = text;
+            }
+        };
+
+        // Set root nodes
+        this.nodes = [ div0 ];
+
+        console.log( 'constructor called' );
+    }
+
+    updateSpots( __data__ ) {
+        console.log( 'before update spots' );
+
+        if ( __data__.text !== undefined ) {
+            this.__update__.text( __data__.text );
+        }
+
+        console.log( 'spots updated' );
+    }
+
+    @options get startDate() {
+        return new Date();
+    }
 }
 ```

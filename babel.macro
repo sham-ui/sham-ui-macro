@@ -3,6 +3,7 @@
 const { createMacro } = require( 'babel-macros' );
 const inject = require( './macros/inject' );
 const options = require( './macros/options' );
+const mergeWithTemplate = require( './macros/merge-with-template' );
 
 module.exports = createMacro( macro );
 
@@ -16,6 +17,12 @@ function macro( { references } ) {
     if ( references.options ) {
         references.options.forEach( referencePath => {
             options( referencePath.findParent( x => x.isDecorator() ) );
+        } );
+    }
+
+    if ( references.mergeWithTemplate ) {
+        references.mergeWithTemplate.forEach( referencePath => {
+            mergeWithTemplate( referencePath.findParent( x => x.isDecorator() ) );
         } );
     }
 }

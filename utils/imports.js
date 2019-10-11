@@ -39,9 +39,9 @@ module.exports = class Imports {
                 t.stringLiteral( 'sham-ui' )
             );
             this.root.unshiftContainer( 'body', node );
-            this.importPath = node;
+            this.importPath = this.root.get( 'body.0' );
         } else {
-            this.importPath.get( 'specifiers' ).pushContainer( 'specifiers', specifier );
+            this.importPath.pushContainer( 'specifiers', specifier );
         }
         this.imports.set( name, name );
         return name;
