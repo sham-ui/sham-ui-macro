@@ -207,9 +207,7 @@ class dummy extends __UI__.Component {
     updateSpots( __data__ ) {
         console.log( 'before update spots' );
 
-        if ( __data__.text !== undefined ) {
-            this.__update__.text( __data__.text );
-        }
+        this.__update__.text( __data__.text );
 
         console.log( 'spots updated' );
     }

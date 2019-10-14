@@ -1,5 +1,6 @@
 const t = require( 'babel-types' );
 const Imports = require( '../utils/imports' );
+const { findConfigureOptionsMethod, findConfigureObject } = require( '../utils/configure-options' );
 
 /**
  * Macro for sham-ui `@options`. Replace decorator with `configureOptions` method
@@ -124,21 +125,6 @@ function getOrCreate( getCallback, createCallback ) {
 
 /**
  * @private
- * @param {BabelPath} classBodyPath
- * @return {BabelPath|undefined}
- */
-function findConfigureOptionsMethod( classBodyPath ) {
-    return classBodyPath
-        .get( 'body' )
-        .find(
-            p => p.isClassMethod() &&
-            p.get( 'key' ).isIdentifier() &&
-            p.node.key.name === 'configureOptions'
-        );
-}
-
-/**
- * @private
  * @param {string} configureOptionsName
  * @param {string} className
  * @return {ClassMethod}
@@ -161,31 +147,6 @@ function buildConfigureOptionsMethod( configureOptionsName, className ) {
             buildConfigureOptionsExpression( configureOptionsName, className )
         ] )
     );
-}
-
-/**
- * @private
- * @param {BabelPath} configureOptionsMethodPath
- * @param {string} configureOptionsName
- * @return {BabelPath|undefined}
- */
-function findConfigureObject( configureOptionsMethodPath, configureOptionsName ) {
-    let configureObject;
-    configureOptionsMethodPath.traverse( {
-        ObjectExpression( path ) {
-            if ( !path.parentPath.isCallExpression() ) {
-                return;
-            }
-            if ( !path.parentPath.get( 'callee' ).isIdentifier() ) {
-                return;
-            }
-            if ( path.parentPath.get( 'callee' ).node.name === configureOptionsName ) {
-                configureObject = path;
-                path.stop();
-            }
-        }
-    } );
-    return configureObject;
 }
 
 /**
