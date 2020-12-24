@@ -9,7 +9,7 @@ Babel macros for `sham-ui`.
 ### Install
 
 Install from yarn:
-`yadn add sham-ui-macro --dev`
+`yarn add sham-ui-macro --dev`
 
 And add `babel-macros` plugin to your babel config. 
 
