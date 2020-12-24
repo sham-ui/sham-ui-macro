@@ -1,6 +1,4 @@
 const t = require( 'babel-types' );
-const Imports = require( '../utils/imports' );
-const { findConfigureOptionsMethod, findConfigureObject } = require( '../utils/configure-options' );
 
 /**
  * Merge component class with template class.
@@ -50,12 +48,6 @@ const { findConfigureOptionsMethod, findConfigureObject } = require( '../utils/c
  *         super( ...arguments );
  *         console.log( 'constructor called' );
  *     }
- *
- *     updateSpots() {
- *         console.log( 'before update spots' );
- *         super.updateSpots(  ...arguments );
- *         console.log( 'spots updated' );
- *     }
  * }
  *
  * // ↓ ↓ ↓ ↓ ↓ ↓
@@ -85,14 +77,6 @@ const { findConfigureOptionsMethod, findConfigureObject } = require( '../utils/c
  *         this.nodes = [ div0 ];
  *
  *         console.log( 'constructor called' );
- *     }
- *
- *     updateSpots( __data__ ) {
- *         console.log( 'before update spots' );
- *
- *         this.__update__.text( __data__.text );
- *
- *         console.log( 'spots updated' );
  *     }
  *
  *     \@options get startDate() {
@@ -152,15 +136,6 @@ module.exports = function mergeWithTemplate( decoratorPath ) {
         } );
 
     classDeclaration.remove();
-
-    if ( methods.has( 'updateSpots' ) ) {
-        const updateSpots = methods.get( 'updateSpots' );
-        options
-            .concat( collectOptionsFromConfigureOptions( superClass ) )
-            .forEach(
-                option => optimizeUpdateSpots( updateSpots, option )
-            );
-    }
 };
 
 /**
@@ -247,58 +222,4 @@ function isSuper( node ) {
                 t.isSuper( node.expression.callee )
             )
         );
-}
-
-/**
- * @private
- * @param {BabelPath} superClass
- * @return []string
- */
-function collectOptionsFromConfigureOptions( superClass ) {
-    const options = [];
-    const configureOptions = findConfigureOptionsMethod( superClass.get( 'body' ) );
-    if ( configureOptions ) {
-        const imports = new Imports( superClass );
-        const optionsObject = findConfigureObject(
-            configureOptions,
-            imports.imports.get( 'configureOptions' )
-        );
-        if ( optionsObject ) {
-            optionsObject.node.properties.forEach( prop => {
-                if ( t.isIdentifier( prop.key ) ) {
-                    options.push( prop.key.name );
-                }
-            } );
-        }
-    }
-    return options;
-}
-
-/**
- * @private
- * @param {BabelPath} updateSpot
- * @param {string} optionName
- */
-function optimizeUpdateSpots( updateSpot, optionName ) {
-    updateSpot.traverse( {
-        IfStatement( p ) {
-            const test = p.get( 'test' );
-            const left = test.get( 'left' );
-            const right = test.get( 'right' );
-            const isSearchableIf = (
-                test.isBinaryExpression() &&
-                '!==' === test.node.operator &&
-                right.isIdentifier() &&
-                'undefined' === right.node.name &&
-                left.isMemberExpression() &&
-                left.get( 'object' ).isIdentifier() &&
-                '__data__' === left.node.object.name &&
-                left.get( 'property' ).isIdentifier() &&
-                left.node.property.name === optionName
-            );
-            if ( isSearchableIf ) {
-                p.replaceWithMultiple( p.node.consequent.body );
-            }
-        }
-    } );
 }

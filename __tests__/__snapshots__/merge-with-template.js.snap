@@ -26,12 +26,6 @@ class Template extends __UI__.Component {
         // Set root nodes
         this.nodes = [ div0 ];
     }
-
-    updateSpots( __data__ ) {
-        if ( __data__.text !== undefined ) {
-            this.__update__.text( __data__.text );
-        }
-    }
 }
 
 @mergeWithTemplate
@@ -46,12 +40,6 @@ class dummy extends Template {
     constructor() {
         super( ...arguments );
         this.logger.log( 'constructor called' ); 
-    }
-        
-    updateSpots() {
-        this.logger.log( 'before update spots' ); 
-        super.updateSpots(  ...arguments );
-        this.logger.log( 'spots updated' );
     }
 }
 
@@ -83,14 +71,6 @@ class dummy extends __UI__.Component {
         this.nodes = [div0];
 
         this.logger.log('constructor called');
-    }
-
-    updateSpots(__data__) {
-        this.logger.log('before update spots');
-
-        this.__update__.text(__data__.text);
-
-        this.logger.log('spots updated');
     }
 
     configureOptions() {
@@ -140,12 +120,6 @@ class Template extends __UI__.Component {
         // Set root nodes
         this.nodes = [ div0 ];
     }
-
-    updateSpots( __data__ ) {
-        if ( __data__.text !== undefined ) {
-            this.__update__.text( __data__.text );
-        }
-    }
 }
 
 @mergeWithTemplate
@@ -158,12 +132,6 @@ class dummy extends Template {
     constructor() {
         super( ...arguments );
         console.log( 'constructor called' ); 
-    }
-        
-    updateSpots() {
-        console.log( 'before update spots' ); 
-        super.updateSpots(  ...arguments );
-        console.log( 'spots updated' );
     }
 }
 
@@ -195,14 +163,6 @@ class dummy extends __UI__.Component {
         this.nodes = [div0];
 
         console.log('constructor called');
-    }
-
-    updateSpots(__data__) {
-        console.log('before update spots');
-
-        this.__update__.text(__data__.text);
-
-        console.log('spots updated');
     }
     @options
     get startDate() {

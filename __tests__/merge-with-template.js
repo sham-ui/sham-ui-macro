@@ -54,12 +54,6 @@ pluginTester( {
                     // Set root nodes
                     this.nodes = [ div0 ];
                 }
-            
-                updateSpots( __data__ ) {
-                    if ( __data__.text !== undefined ) {
-                        this.__update__.text( __data__.text );
-                    }
-                }
             }
             
             @mergeWithTemplate
@@ -72,12 +66,6 @@ pluginTester( {
                 constructor() {
                     super( ...arguments );
                     console.log( 'constructor called' ); 
-                }
-        
-                updateSpots() {
-                    console.log( 'before update spots' ); 
-                    super.updateSpots(  ...arguments );
-                    console.log( 'spots updated' );
                 }
             }
         `
@@ -108,12 +96,6 @@ pluginTester( {
                     // Set root nodes
                     this.nodes = [ div0 ];
                 }
-            
-                updateSpots( __data__ ) {
-                    if ( __data__.text !== undefined ) {
-                        this.__update__.text( __data__.text );
-                    }
-                }
             }
             
             @mergeWithTemplate
@@ -128,12 +110,6 @@ pluginTester( {
                 constructor() {
                     super( ...arguments );
                     this.logger.log( 'constructor called' ); 
-                }
-        
-                updateSpots() {
-                    this.logger.log( 'before update spots' ); 
-                    super.updateSpots(  ...arguments );
-                    this.logger.log( 'spots updated' );
                 }
             }
         `

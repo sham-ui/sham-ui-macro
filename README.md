@@ -167,12 +167,6 @@ class dummy extends Template {
         super( ...arguments );
         console.log( 'constructor called' );
     }
-
-    updateSpots() {
-        console.log( 'before update spots' );
-        super.updateSpots(  ...arguments );
-        console.log( 'spots updated' );
-    }
 }
 
 // ↓ ↓ ↓ ↓ ↓ ↓
@@ -202,14 +196,6 @@ class dummy extends __UI__.Component {
         this.nodes = [ div0 ];
 
         console.log( 'constructor called' );
-    }
-
-    updateSpots( __data__ ) {
-        console.log( 'before update spots' );
-
-        this.__update__.text( __data__.text );
-
-        console.log( 'spots updated' );
     }
 
     @options get startDate() {
