@@ -45,7 +45,7 @@ class dummy extends Template {
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-import { DI, configureOptions } from 'sham-ui';
+import { configureOptions } from 'sham-ui';
 
 
 class dummy extends __UI__.Component {
@@ -87,7 +87,7 @@ class dummy extends __UI__.Component {
     }
 
     get logger() {
-        return DI.resolve('logger');
+        return this.DI.resolve('logger');
     }
 
 }

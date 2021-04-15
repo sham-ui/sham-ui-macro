@@ -1,5 +1,4 @@
 const t = require( 'babel-types' );
-const Imports = require( '../utils/imports' );
 
 /**
  * Macro for `DI.resolve`
@@ -16,15 +15,13 @@ const Imports = require( '../utils/imports' );
  *
  * // ↓ ↓ ↓ ↓ ↓ ↓
  *
- * import { DI } from 'sham-ui';
- *
  * class Service {
  *    get api() {
- *        return DI.resolve('api');
+ *        return this.DI.resolve('api');
  *    }
  *
  *    get uiStore() {
- *        return DI.resolve('sham-ui:store');
+ *        return this.DI.resolve('sham-ui:store');
  *    }
  *
  * }
@@ -39,9 +36,6 @@ module.exports = function inject( decoratorPath ) {
     if ( !parentPath.isClassProperty() ) {
         throw new Error( `Only ClassProperty allow, get "${parentPath.node.type}"` );
     }
-
-    const imports = new Imports( parentPath );
-    const DI = imports.addImport( 'DI' );
 
     let name;
     if ( t.isCallExpression( decoratorPath.node.expression ) ) {
@@ -59,7 +53,10 @@ module.exports = function inject( decoratorPath ) {
                 t.returnStatement(
                     t.callExpression(
                         t.memberExpression(
-                            t.identifier( DI ),
+                            t.memberExpression(
+                                t.thisExpression(),
+                                t.identifier( 'DI' )
+                            ),
                             t.identifier( 'resolve' )
                         ),
                         [ name ]

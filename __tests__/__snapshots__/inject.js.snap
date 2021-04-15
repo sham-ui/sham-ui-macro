@@ -10,12 +10,9 @@ class FooComponent extends Template {
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-import { DI } from 'sham-ui';
-
-
 class FooComponent extends Template {
     get store() {
-        return DI.resolve('store');
+        return this.DI.resolve('store');
     }
 
 }
@@ -32,12 +29,9 @@ class FooComponent extends Template {
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-import { DI } from 'sham-ui';
-
-
 class FooComponent extends Template {
     get store() {
-        return DI.resolve('sham-ui:store');
+        return this.DI.resolve('sham-ui:store');
     }
 
 }
@@ -59,11 +53,11 @@ import { DI as di } from 'sham-ui';
 
 class Service {
     get api() {
-        return di.resolve('api');
+        return this.DI.resolve('api');
     }
 
     get uiStore() {
-        return di.resolve('sham-ui:store');
+        return this.DI.resolve('sham-ui:store');
     }
 
 }
@@ -85,11 +79,11 @@ import { DI } from 'sham-ui';
 
 class Service {
     get api() {
-        return DI.resolve('api');
+        return this.DI.resolve('api');
     }
 
     get uiStore() {
-        return DI.resolve('sham-ui:store');
+        return this.DI.resolve('sham-ui:store');
     }
 
 }
