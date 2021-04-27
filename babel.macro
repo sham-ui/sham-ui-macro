@@ -2,27 +2,60 @@
 'use strict';
 const { createMacro } = require( 'babel-macros' );
 const inject = require( './macros/inject' );
-const options = require( './macros/options' );
-const mergeWithTemplate = require( './macros/merge-with-template' );
+const ref = require( './macros/ref' );
 
-module.exports = createMacro( macro );
+const refState = {
+    map: new Map()
+};
 
-function macro( { references } ) {
+module.exports = createMacro( macro, {
+    configName: 'ref'
+} );
+
+function macro( { references, config } ) {
     if ( references.inject ) {
         references.inject.forEach( referencePath => {
             inject( referencePath.findParent( x => x.isDecorator() ) );
         } );
     }
 
-    if ( references.options ) {
-        references.options.forEach( referencePath => {
-            options( referencePath.findParent( x => x.isDecorator() ) );
-        } );
-    }
+    if ( references.ref ) {
+        const { enabled = false } = config;
+        if ( enabled ) {
+            references.ref.forEach( referencePath => {
+                ref(
+                    referencePath.findParent( x => x.isCallExpression() ),
+                    config,
+                    refState
+                )
+            } );
+        } else {
 
-    if ( references.mergeWithTemplate ) {
-        references.mergeWithTemplate.forEach( referencePath => {
-            mergeWithTemplate( referencePath.findParent( x => x.isDecorator() ) );
-        } );
+            // Don't enable ref for libs
+            if ( references.inject ) {
+
+                // Remove `inject` import
+                references.inject[ 0 ]
+                    .findParent( path => path.isProgram() )
+                    .get( 'body' )
+                    .filter( path => path.isImportDeclaration() )
+                    .forEach(
+                        path => path.get( 'specifiers' )
+                            .filter(
+                                p => (
+                                    p.isImportSpecifier() &&
+                                    'inject' === p.get( 'imported' ).node.name
+                                )
+                            )
+                            .forEach( p => p.remove() )
+                    )
+                ;
+            }
+
+            // Keep imports for process in app level
+            return {
+                keepImports: true
+            }
+        }
     }
 }

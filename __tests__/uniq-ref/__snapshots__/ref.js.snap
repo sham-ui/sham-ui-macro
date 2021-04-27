@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`macros as key: as key 1`] = `
+
+import { ref } from '../../babel.macro';
+const foo = ref();
+const bar = ref();
+
+const state = { [ ref( 'foo' ) ]: true, [ bar ]: false };
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const foo = 0;
+const bar = 1;
+
+const state = { [0]: true, [bar]: false };
+
+`;
+
+exports[`macros with args: with args 1`] = `
+
+import { ref } from '../../babel.macro';
+
+const foo = ref( 'foo' );
+const foo1 = ref( 'foo' );
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const foo = 0;
+const foo1 = 0;
+
+`;
+
+exports[`macros without args: without args 1`] = `
+
+import { ref } from '../../babel.macro';
+
+const foo = ref();
+const bar = ref();
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const foo = 0;
+const bar = 1;
+
+`;

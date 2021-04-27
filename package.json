@@ -1,6 +1,6 @@
 {
   "name": "sham-ui-macro",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Babel macros for sham-ui",
   "keywords": [
     "babel-macros",
@@ -14,6 +14,7 @@
   "scripts": {
     "test": "jest --coverage && yarn doc:lint",
     "test:watch": "jest --watchAll",
+    "test:clear-cache": "jest --clearCache",
     "doc:generate": "documentation readme babel.macro --section=API",
     "doc:lint": "documentation lint *.macro index.js"
   },
@@ -50,5 +51,10 @@
         ]
       }
     ]
+  },
+  "babelMacros": {
+    "ref": {
+      "enabled": false
+    }
   }
 }
