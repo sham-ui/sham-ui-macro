@@ -30,7 +30,7 @@ pluginTester( {
     tests: [ {
         title: 'without args',
         code: `
-            import { ref } from '../babel.macro';
+            import ref from '../ref.macro';
 
             const foo = ref();
         `,
@@ -38,21 +38,22 @@ pluginTester( {
     }, {
         title: 'with args',
         code: `
-            import { ref } from '../babel.macro';
+            import ref from '../ref.macro';
 
             const foo = ref( 'bar' ) ;
         `
     }, {
         title: 'as key',
         code: `
-            import { ref } from '../babel.macro';
+            import ref from '../ref.macro';
 
             const state = { [ ref( 'foo' ) ]: true }; 
         `
     }, {
         title: 'with inject',
         code: `
-            import { inject, ref } from '../babel.macro';
+            import ref from '../ref.macro';
+            import inject from '../inject.macro'
 
             class FooComponent extends Template {
                 @inject store;

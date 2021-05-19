@@ -30,7 +30,7 @@ pluginTester( {
     tests: [ {
         title: '@inject store',
         code: `
-            import { inject } from '../babel.macro';
+            import inject from '../inject.macro';
 
             class FooComponent extends Template {
                 @inject store;
@@ -39,7 +39,7 @@ pluginTester( {
     }, {
         title: '@inject(\'sham-ui:store\') store',
         code: `
-            import { inject } from '../babel.macro';
+            import inject from '../inject.macro';
 
             class FooComponent extends Template {
                 @inject('sham-ui:store') store
@@ -49,7 +49,7 @@ pluginTester( {
         title: 'with imported DI',
         code: `
             import { DI } from 'sham-ui'; 
-            import { inject } from '../babel.macro';
+            import inject from '../inject.macro';
             class Service {
                 @inject api;
                 @inject( 'sham-ui:store' ) uiStore;
@@ -59,7 +59,7 @@ pluginTester( {
         title: 'with imported DI as alias',
         code: `
             import { DI as di } from 'sham-ui'; 
-            import { inject } from '../babel.macro';
+            import inject from '../inject.macro';
             class Service {
                 @inject api;
                 @inject( 'sham-ui:store' ) uiStore;

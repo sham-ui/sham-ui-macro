@@ -73,7 +73,7 @@ Macro for `DI.resolve`
 ##### Examples
 
 ```javascript
-import { inject } from 'sham-ui-macro/babel.macro';
+import inject from 'sham-ui-macro/inject.macro';
 class Service {
     @inject api;
     @inject( 'sham-ui:store' ) uiStore;
@@ -108,11 +108,12 @@ Macro for get/generate uniq reference
 // Config in package.json
 // "babelMacros": {
 //   "ref": {
-//     "enabled": false
+//     "enabled": true,
+//     "uniq": true
 //   }
 // }
 
-import { ref } from 'sham-ui-macro/babel.macro';
+import ref from 'sham-ui-macro/ref.macro';
 
 const firstName = ref();
 const lastName = ref();

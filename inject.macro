@@ -1,0 +1,12 @@
+/* eslint-env node */
+'use strict';
+const { createMacro } = require( 'babel-macros' );
+const inject = require( './macros/inject' );
+
+module.exports = createMacro( macro );
+
+function macro( { references } ) {
+    references.default.forEach( referencePath => {
+        inject( referencePath.findParent( x => x.isDecorator() ) );
+    } );
+}

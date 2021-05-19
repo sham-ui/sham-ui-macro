@@ -31,21 +31,21 @@ pluginTester( {
         title: 'without args',
         code: `
            
-            import { ref } from '../../babel.macro';
+            import ref from '../../ref.macro';
 
             const foo = ref();
         `
     }, {
         title: 'with args',
         code: `
-            import { ref } from '../../babel.macro';
+            import ref from '../../ref.macro';
 
             const foo = ref( 'bar' ) ;
         `
     }, {
         title: 'as key',
         code: `
-            import { ref } from '../../babel.macro';
+            import ref from '../../ref.macro';
 
             const state = { [ ref( 'foo' ) ]: true }; 
         `

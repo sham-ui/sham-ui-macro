@@ -9,11 +9,12 @@ const t = require( 'babel-types' );
  * // Config in package.json
  * // "babelMacros": {
  * //   "ref": {
- * //     "enabled": false
+ * //     "enabled": true,
+ * //     "uniq": true
  * //   }
  * // }
  *
- * import { ref } from 'sham-ui-macro/babel.macro';
+ * import ref from 'sham-ui-macro/ref.macro';
  *
  * const firstName = ref();
  * const lastName = ref();

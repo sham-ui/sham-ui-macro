@@ -1,0 +1,31 @@
+/* eslint-env node */
+'use strict';
+const { createMacro } = require( 'babel-macros' );
+const ref = require( './macros/ref' );
+
+const refState = {
+    map: new Map()
+};
+
+module.exports = createMacro( macro, {
+    configName: 'ref'
+} );
+
+function macro( { references, config } ) {
+    const { enabled = false } = config;
+    if ( enabled ) {
+        references.default.forEach( referencePath => {
+            ref(
+                referencePath.findParent( x => x.isCallExpression() ),
+                config,
+                refState
+            )
+        } );
+    } else {
+
+        // Keep imports for process in app level
+        return {
+            keepImports: true
+        }
+    }
+}
