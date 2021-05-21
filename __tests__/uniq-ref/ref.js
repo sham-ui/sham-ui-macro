@@ -30,7 +30,7 @@ pluginTester( {
     tests: [ {
         title: 'without args',
         code: `
-            import ref from '../../ref.macro';
+            import { ref } from '../../ref.macro';
 
             const foo = ref();
             const bar = ref();
@@ -38,7 +38,7 @@ pluginTester( {
     }, {
         title: 'with args',
         code: `
-            import ref from '../../ref.macro';
+            import { ref } from '../../ref.macro';
 
             const foo = ref( 'foo' );
             const foo1 = ref( 'foo' );
@@ -46,7 +46,7 @@ pluginTester( {
     }, {
         title: 'as key',
         code: `
-            import ref from '../../ref.macro';
+            import { ref } from '../../ref.macro';
             const foo = ref();
             const bar = ref();
 

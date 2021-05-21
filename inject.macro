@@ -6,7 +6,15 @@ const inject = require( './macros/inject' );
 module.exports = createMacro( macro );
 
 function macro( { references } ) {
-    references.default.forEach( referencePath => {
+
+    // After transpile with rollup in cjs import will:
+    // var inject_macro = require( 'sham-ui/inject.macro' );
+    // ...
+    // inject_macro.inject();
+    // ...
+    // But for ES modules transpile to
+    // import { inject } from 'sham-ui/inject.macro';
+    ( references.default || references.inject ).forEach( referencePath => {
         inject( referencePath.findParent( x => x.isDecorator() ) );
     } );
 }

@@ -2,13 +2,13 @@
 
 exports[`macros as key: as key 1`] = `
 
-import ref from '../ref.macro';
+import { ref } from '../ref.macro';
 
 const state = { [ ref( 'foo' ) ]: true };
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-import ref from '../ref.macro';
+import { ref } from '../ref.macro';
 
 const state = { [ref('foo')]: true };
 
@@ -16,13 +16,13 @@ const state = { [ref('foo')]: true };
 
 exports[`macros with args: with args 1`] = `
 
-import ref from '../ref.macro';
+import { ref } from '../ref.macro';
 
 const foo = ref( 'bar' ) ;
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-import ref from '../ref.macro';
+import { ref } from '../ref.macro';
 
 const foo = ref('bar');
 
@@ -30,8 +30,8 @@ const foo = ref('bar');
 
 exports[`macros with inject: with inject 1`] = `
 
-import ref from '../ref.macro';
-import inject from '../inject.macro'
+import { ref } from '../ref.macro';
+import { inject } from '../inject.macro'
 
 class FooComponent extends Template {
     @inject store;
@@ -41,7 +41,7 @@ const state = { [ ref( 'foo' ) ]: true };
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-import ref from '../ref.macro';
+import { ref } from '../ref.macro';
 
 
 class FooComponent extends Template {

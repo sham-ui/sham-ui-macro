@@ -14,7 +14,7 @@ const t = require( 'babel-types' );
  * //   }
  * // }
  *
- * import ref from 'sham-ui-macro/ref.macro';
+ * import { ref } from 'sham-ui-macro/ref.macro';
  *
  * const firstName = ref();
  * const lastName = ref();

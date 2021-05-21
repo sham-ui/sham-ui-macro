@@ -6,7 +6,7 @@ const t = require( 'babel-types' );
  * @param {string} [name] Name of injected item
  *
  * @example
- * import inject from 'sham-ui-macro/inject.macro';
+ * import { inject } from 'sham-ui-macro/inject.macro';
  * class Service {
  *     \@inject api;
  *     \@inject( 'sham-ui:store' ) uiStore;
