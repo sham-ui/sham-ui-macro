@@ -65,6 +65,11 @@ pluginTester( {
                 @inject( 'sham-ui:store' ) uiStore;
             }
         `
+    }, {
+        title: 'don\'t used',
+        code: `
+            import '../inject.macro';
+        `
     } ]
 } );
 

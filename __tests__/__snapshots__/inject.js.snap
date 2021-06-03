@@ -38,6 +38,16 @@ class FooComponent extends Template {
 
 `;
 
+exports[`macros don't used: don't used 1`] = `
+
+import '../inject.macro';
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+
+
+`;
+
 exports[`macros with imported DI as alias: with imported DI as alias 1`] = `
 
 import { DI as di } from 'sham-ui'; 

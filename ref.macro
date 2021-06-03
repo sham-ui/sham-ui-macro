@@ -22,7 +22,9 @@ function macro( { references, config } ) {
         // ...
         // But for ES modules transpile to
         // import { ref } from 'sham-ui/ref.macro';
-        ( references.default || references.ref ).forEach( referencePath => {
+        // And some templates don't use ref:
+        // import 'sham-ui-macro/ref.macro'
+        ( references.default || references.ref || [] ).forEach( referencePath => {
             ref(
                 referencePath.findParent( x => x.isCallExpression() ),
                 config,

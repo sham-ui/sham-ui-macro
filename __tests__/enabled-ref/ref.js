@@ -49,5 +49,10 @@ pluginTester( {
 
             const state = { [ ref( 'foo' ) ]: true }; 
         `
+    }, {
+        title: 'don\'t used',
+        code: `
+            import '../../ref.macro';
+        `
     } ]
 } );

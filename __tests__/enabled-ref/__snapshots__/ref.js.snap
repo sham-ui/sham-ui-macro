@@ -12,6 +12,16 @@ const state = { ['foo']: true };
 
 `;
 
+exports[`macros don't used: don't used 1`] = `
+
+import '../../ref.macro';
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+
+
+`;
+
 exports[`macros with args: with args 1`] = `
 
 import { ref } from '../../ref.macro';
