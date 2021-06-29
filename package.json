@@ -1,6 +1,6 @@
 {
   "name": "sham-ui-macro",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "Babel macros for sham-ui",
   "keywords": [
     "babel-macros",

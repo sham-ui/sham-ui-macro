@@ -30,27 +30,102 @@ pluginTester( {
     tests: [ {
         title: 'without args',
         code: `
-            import { ref } from '../../ref.macro';
+           
+            import { $ } from '../../ref.macro';
 
-            const foo = ref();
-            const bar = ref();
+            const foo = $();
         `
     }, {
         title: 'with args',
         code: `
-            import { ref } from '../../ref.macro';
+            import { $ } from '../../ref.macro';
 
-            const foo = ref( 'foo' );
-            const foo1 = ref( 'foo' );
+            const foo = $( 'bar' ) ;
         `
     }, {
         title: 'as key',
         code: `
-            import { ref } from '../../ref.macro';
-            const foo = ref();
-            const bar = ref();
+            import { $ } from '../../ref.macro';
 
-            const state = { [ ref( 'foo' ) ]: true, [ bar ]: false }; 
+            const state = { [ $( 'foo' ) ]: true }; 
+        `
+    }, {
+        title: 'as member',
+        code: `
+            import { $ } from '../../ref.macro';
+
+            const foo = $.bar ;
+        `
+    }, {
+        title: 'member as key',
+        code: `
+            import { $ } from '../../ref.macro';
+
+            const state = { [ $.foo ]: true }; 
+        `
+    }, {
+        title: 'cjs without args',
+        code: `
+           
+            import babel_macro from '../../ref.macro';
+
+            const foo = babel_macro.$();
+        `
+    }, {
+        title: 'cjs with args',
+        code: `
+            import babel_macro from '../../ref.macro';
+
+            const foo = babel_macro.$( 'bar' ) ;
+        `
+    }, {
+        title: 'cjs as key',
+        code: `
+            import babel_macro from '../../ref.macro';
+
+            const state = { [ babel_macro.$( 'foo' ) ]: true }; 
+        `
+    }, {
+        title: 'cjs as member',
+        code: `
+            import babel_macro from '../../ref.macro';
+
+            const foo = babel_macro.$.bar ;
+        `
+    }, {
+        title: 'cjs member as key',
+        code: `
+            import babel_macro from '../../ref.macro';
+
+            const state = { [ babel_macro.$.foo ]: true }; 
+        `
+    }, {
+        title: 'this$ assign',
+        code: `
+            import { this$ } from '../../ref.macro';
+
+            this$.foo = 1;
+        `
+    }, {
+        title: 'this$ call',
+        code: `
+            import { this$ } from '../../ref.macro';
+
+            this$.foo( 1 );
+        `
+    }, {
+        title: 'cjs this$ assign',
+        code: `
+            import babel_macro from '../../ref.macro';
+
+            babel_macro.this$.foo = 1;
+        `
+    }, {
+        title: 'cjs this$ call',
+        code: `
+            import babel_macro from '../../ref.macro';
+
+            babel_macro.this$.foo( 1 );
         `
     }, {
         title: 'don\'t used',

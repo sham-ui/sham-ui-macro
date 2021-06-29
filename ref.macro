@@ -1,7 +1,7 @@
 /* eslint-env node */
 'use strict';
 const { createMacro } = require( 'babel-macros' );
-const ref = require( './macros/ref' );
+const { ref, thisRef } = require( './macros/ref' );
 
 const refState = {
     map: new Map()
@@ -14,23 +14,54 @@ module.exports = createMacro( macro, {
 function macro( { references, config } ) {
     const { enabled = false } = config;
     if ( enabled ) {
+        if ( references.$ ) {
+            references.$.forEach(
+                referencePath => ref(
+                    referencePath.findParent(
+                        x => x.isCallExpression() || x.isMemberExpression()
+                    ),
+                    config,
+                    refState
+                )
+            );
+            return;
+        }
+
+        if ( references.this$ ) {
+            references.this$.forEach(
+                referencePath => thisRef( referencePath.parentPath, config, refState )
+            );
+            return;
+        }
 
         // After transpile with rollup in cjs import will:
         // var ref_macro = require( 'sham-ui/ref.macro' );
         // ...
-        // const a = ref_macro.ref();
+        // const a = ref_macro.$();
         // ...
         // But for ES modules transpile to
-        // import { ref } from 'sham-ui/ref.macro';
+        // import { $ } from 'sham-ui/ref.macro';
         // And some templates don't use ref:
         // import 'sham-ui-macro/ref.macro'
-        ( references.default || references.ref || [] ).forEach( referencePath => {
-            ref(
-                referencePath.findParent( x => x.isCallExpression() ),
-                config,
-                refState
-            )
-        } );
+        if ( references.default ) {
+            references.default.forEach( referencePath => {
+                const macroName = referencePath.parentPath.get( 'property' ).node.name;
+                if ( '$' === macroName ) {
+                    ref(
+                        referencePath.findParent( x => x.isCallExpression() || (
+                            x.isMemberExpression() &&
+                            x.get( 'object' ).isMemberExpression()
+                        ) ),
+                        config,
+                        refState
+                    )
+                } else if ( 'this$' === macroName ) {
+                    thisRef( referencePath.parentPath.parentPath, config, refState )
+                } else {
+                    throw new Error( `Unknown macro name: ${macroName}` );
+                }
+            } );
+        }
     } else {
 
         // Keep imports for process in app level

@@ -58,9 +58,12 @@ Add to to `package.json`
 -   [inject](#inject)
     -   [Parameters](#parameters)
     -   [Examples](#examples)
--   [ref](#ref)
+-   [$](#)
     -   [Parameters](#parameters-1)
     -   [Examples](#examples-1)
+-   [this$](#this)
+    -   [Parameters](#parameters-2)
+    -   [Examples](#examples-2)
 
 #### inject
 
@@ -94,7 +97,7 @@ class Service {
 }
 ```
 
-#### ref
+#### $
 
 Macro for get/generate uniq reference
 
@@ -113,15 +116,15 @@ Macro for get/generate uniq reference
 //   }
 // }
 
-import { ref } from 'sham-ui-macro/ref.macro';
+import { $ } from 'sham-ui-macro/ref.macro';
 
-const firstName = ref();
-const lastName = ref();
+const firstName = $();
+const lastName = $.lastName;
 const state = {
     [ firstName ]: 'John',
     [ lastName ]: 'Smith'
 }
-const fullName = state[ ref( 'firstName' ) ] + state[ ref( 'lastName' ) ];
+const fullName = state[ $( 'firstName' ) ] + state[ $.lastName ];
 
 // ↓ ↓ ↓ ↓ ↓ ↓
 
@@ -132,4 +135,32 @@ const state = {
     [ lastName ]: 'Smith'
 }
 const fullName = state[ 0 ] + state[ 1 ];
+```
+
+#### this$
+
+Sugar for $ macro. Translate `this$.foo` to analog `this[ $.foo ]`
+
+##### Parameters
+
+-   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Name of reference
+
+##### Examples
+
+```javascript
+// Config in package.json
+// "babelMacros": {
+//   "ref": {
+//     "enabled": true,
+//     "uniq": true
+//   }
+// }
+
+import { this$ } from 'sham-ui-macro/ref.macro';
+
+this$.handleClick = e => { };
+
+// ↓ ↓ ↓ ↓ ↓ ↓
+
+this[ 0 ] = e => {};
 ```

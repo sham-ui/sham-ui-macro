@@ -2,18 +2,109 @@
 
 exports[`macros as key: as key 1`] = `
 
-import { ref } from '../../ref.macro';
-const foo = ref();
-const bar = ref();
+import { $ } from '../../ref.macro';
 
-const state = { [ ref( 'foo' ) ]: true, [ bar ]: false };
+const state = { [ $( 'foo' ) ]: true };
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const state = { [0]: true };
+
+`;
+
+exports[`macros as member: as member 1`] = `
+
+import { $ } from '../../ref.macro';
+
+const foo = $.bar ;
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const foo = 1;
+
+`;
+
+exports[`macros cjs as key: cjs as key 1`] = `
+
+import babel_macro from '../../ref.macro';
+
+const state = { [ babel_macro.$( 'foo' ) ]: true };
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const state = { [0]: true };
+
+`;
+
+exports[`macros cjs as member: cjs as member 1`] = `
+
+import babel_macro from '../../ref.macro';
+
+const foo = babel_macro.$.bar ;
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const foo = 1;
+
+`;
+
+exports[`macros cjs member as key: cjs member as key 1`] = `
+
+import babel_macro from '../../ref.macro';
+
+const state = { [ babel_macro.$.foo ]: true };
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const state = { [0]: true };
+
+`;
+
+exports[`macros cjs this$ assign: cjs this$ assign 1`] = `
+
+import babel_macro from '../../ref.macro';
+
+babel_macro.this$.foo = 1;
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+this[0] = 1;
+
+`;
+
+exports[`macros cjs this$ call: cjs this$ call 1`] = `
+
+import babel_macro from '../../ref.macro';
+
+babel_macro.this$.foo( 1 );
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+this[0](1);
+
+`;
+
+exports[`macros cjs with args: cjs with args 1`] = `
+
+import babel_macro from '../../ref.macro';
+
+const foo = babel_macro.$( 'bar' ) ;
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const foo = 1;
+
+`;
+
+exports[`macros cjs without args: cjs without args 1`] = `
+
+import babel_macro from '../../ref.macro';
+
+const foo = babel_macro.$();
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
 const foo = 0;
-const bar = 1;
-
-const state = { [0]: true, [bar]: false };
 
 `;
 
@@ -27,30 +118,62 @@ import '../../ref.macro';
 
 `;
 
-exports[`macros with args: with args 1`] = `
+exports[`macros member as key: member as key 1`] = `
 
-import { ref } from '../../ref.macro';
+import { $ } from '../../ref.macro';
 
-const foo = ref( 'foo' );
-const foo1 = ref( 'foo' );
+const state = { [ $.foo ]: true };
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-const foo = 0;
-const foo1 = 0;
+const state = { [0]: true };
+
+`;
+
+exports[`macros this$ assign: this$ assign 1`] = `
+
+import { this$ } from '../../ref.macro';
+
+this$.foo = 1;
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+this[0] = 1;
+
+`;
+
+exports[`macros this$ call: this$ call 1`] = `
+
+import { this$ } from '../../ref.macro';
+
+this$.foo( 1 );
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+this[0](1);
+
+`;
+
+exports[`macros with args: with args 1`] = `
+
+import { $ } from '../../ref.macro';
+
+const foo = $( 'bar' ) ;
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const foo = 1;
 
 `;
 
 exports[`macros without args: without args 1`] = `
 
-import { ref } from '../../ref.macro';
+import { $ } from '../../ref.macro';
 
-const foo = ref();
-const bar = ref();
+const foo = $();
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
 const foo = 0;
-const bar = 1;
 
 `;

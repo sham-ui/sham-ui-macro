@@ -2,7 +2,7 @@ const t = require( 'babel-types' );
 
 /**
  * Macro for get/generate uniq reference
- * @function ref
+ * @function $
  * @param {string} [name] Name of reference
  *
  * @example
@@ -14,15 +14,15 @@ const t = require( 'babel-types' );
  * //   }
  * // }
  *
- * import { ref } from 'sham-ui-macro/ref.macro';
+ * import { $ } from 'sham-ui-macro/ref.macro';
  *
- * const firstName = ref();
- * const lastName = ref();
+ * const firstName = $();
+ * const lastName = $.lastName;
  * const state = {
  *     [ firstName ]: 'John',
  *     [ lastName ]: 'Smith'
  * }
- * const fullName = state[ ref( 'firstName' ) ] + state[ ref( 'lastName' ) ];
+ * const fullName = state[ $( 'firstName' ) ] + state[ $.lastName ];
  *
  * // ↓ ↓ ↓ ↓ ↓ ↓
  *
@@ -36,26 +36,21 @@ const t = require( 'babel-types' );
  */
 
 /**
- * @param {BabelPath} callExpressionPath
+ * @param {BabelPath} expression
  * @param {Object} config
  * @param {Object} state
  * @private
  */
-module.exports = function ref( callExpressionPath, config, state ) {
+function ref( expression, config, state ) {
     const { uniq = false } = config;
 
     let name;
-    const args = callExpressionPath.node.arguments;
-    if ( 0 === args.length  ) {
-        const parentPath = callExpressionPath.parentPath;
-        if ( !parentPath.isVariableDeclarator() ) {
-            throw new Error( 'Pass name to ref' );
-        }
-
-        // Use variable as name
-        name = parentPath.node.id.name;
+    if ( expression.isCallExpression() ) {
+        name = getNameFromCallExpression( expression );
+    } else if ( expression.isMemberExpression() ) {
+        name = getNameFromMemberExpression( expression );
     } else {
-        name = args[ 0 ].value;
+        throw new Error( `Unknown usage for ref macro, node.type == '${expression.node.type}'` );
     }
 
     let identifier;
@@ -71,7 +66,87 @@ module.exports = function ref( callExpressionPath, config, state ) {
         identifier = t.StringLiteral( name );
     }
 
-    callExpressionPath.replaceWith(
+    expression.replaceWith(
         identifier
     );
+}
+
+/**
+ * Sugar for $ macro. Translate `this$.foo` to analog `this[ $.foo ]`
+ * @function this$
+ * @param {string} [name] Name of reference
+ *
+ * @example
+ * // Config in package.json
+ * // "babelMacros": {
+ * //   "ref": {
+ * //     "enabled": true,
+ * //     "uniq": true
+ * //   }
+ * // }
+ *
+ * import { this$ } from 'sham-ui-macro/ref.macro';
+ *
+ * this$.handleClick = e => { };
+ *
+ * // ↓ ↓ ↓ ↓ ↓ ↓
+ *
+ * this[ 0 ] = e => {};
+ */
+function thisRef( expression, config, state ) {
+    const { uniq = false } = config;
+
+    const name = getNameFromMemberExpression( expression );
+
+    let identifier;
+    if ( uniq ) {
+        if ( !state.map.has( name ) ) {
+            state.map.set(
+                name,
+                state.map.size
+            );
+        }
+        identifier = t.NumericLiteral( state.map.get( name ) );
+    } else {
+        identifier = t.StringLiteral( name );
+    }
+
+    expression.replaceWith(
+        t.memberExpression(
+            t.thisExpression(),
+            identifier,
+            true
+        )
+    );
+}
+
+
+function getNameFromCallExpression( expression ) {
+    const args = expression.node.arguments;
+    if ( 0 === args.length  ) {
+        const parentPath = expression.parentPath;
+        if ( !parentPath.isVariableDeclarator() ) {
+            throw new Error( 'Pass name to ref' );
+        }
+
+        // Use variable as name
+        return parentPath.node.id.name;
+    }
+    return args[ 0 ].value;
+}
+
+function getNameFromMemberExpression( expression ) {
+    const property = expression.node.property;
+    if ( !t.isIdentifier( property ) ) {
+        throw new Error(
+            `Property is not Identifier, expected Identifier, receive ${expression.node.type}`
+        );
+    }
+    return property.name;
+}
+
+
+module.exports = {
+    ref,
+    thisRef
 };
