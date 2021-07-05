@@ -1,5 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`macros $ & this$: $ & this$ 1`] = `
+
+import { this$, $ } from '../../ref.macro';
+
+function App( options, update ) {
+    const firstGroup = $();
+    
+    const state = options( {
+        [ firstGroup ]: true,
+    } );
+    
+    this$.toggleGroup = () => update( {
+        [ firstGroup ]: !state[ firstGroup ]
+    } );
+}
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+function App(options, update) {
+    const firstGroup = 'firstGroup';
+
+    const state = options({
+        [firstGroup]: true
+    });
+
+    this['toggleGroup'] = () => update({
+        [firstGroup]: !state[firstGroup]
+    });
+}
+
+`;
+
 exports[`macros as key: as key 1`] = `
 
 import { $ } from '../../ref.macro';

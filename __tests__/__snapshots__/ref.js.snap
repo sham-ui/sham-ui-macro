@@ -2,46 +2,46 @@
 
 exports[`macros as key: as key 1`] = `
 
-import { ref } from '../ref.macro';
+import { $ } from '../ref.macro';
 
-const state = { [ ref( 'foo' ) ]: true };
+const state = { [ $( 'foo' ) ]: true };
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-import { ref } from '../ref.macro';
+import { $ } from '../ref.macro';
 
-const state = { [ref('foo')]: true };
+const state = { [$('foo')]: true };
 
 `;
 
 exports[`macros with args: with args 1`] = `
 
-import { ref } from '../ref.macro';
+import { $ } from '../ref.macro';
 
-const foo = ref( 'bar' ) ;
+const foo = $( 'bar' ) ;
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-import { ref } from '../ref.macro';
+import { $ } from '../ref.macro';
 
-const foo = ref('bar');
+const foo = $('bar');
 
 `;
 
 exports[`macros with inject: with inject 1`] = `
 
-import { ref } from '../ref.macro';
+import { $ } from '../ref.macro';
 import { inject } from '../inject.macro'
 
 class FooComponent extends Template {
     @inject store;
 }
 
-const state = { [ ref( 'foo' ) ]: true };
+const state = { [ $( 'foo' ) ]: true };
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-import { ref } from '../ref.macro';
+import { $ } from '../ref.macro';
 
 
 class FooComponent extends Template {
@@ -51,6 +51,6 @@ class FooComponent extends Template {
 
 }
 
-const state = { [ref('foo')]: true };
+const state = { [$('foo')]: true };
 
 `;

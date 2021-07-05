@@ -30,36 +30,36 @@ pluginTester( {
     tests: [ {
         title: 'without args',
         code: `
-            import { ref } from '../ref.macro';
+            import { $ } from '../ref.macro';
 
-            const foo = ref();
+            const foo = $();
         `,
         snapshot: false
     }, {
         title: 'with args',
         code: `
-            import { ref } from '../ref.macro';
+            import { $ } from '../ref.macro';
 
-            const foo = ref( 'bar' ) ;
+            const foo = $( 'bar' ) ;
         `
     }, {
         title: 'as key',
         code: `
-            import { ref } from '../ref.macro';
+            import { $ } from '../ref.macro';
 
-            const state = { [ ref( 'foo' ) ]: true }; 
+            const state = { [ $( 'foo' ) ]: true }; 
         `
     }, {
         title: 'with inject',
         code: `
-            import { ref } from '../ref.macro';
+            import { $ } from '../ref.macro';
             import { inject } from '../inject.macro'
 
             class FooComponent extends Template {
                 @inject store;
             }
 
-            const state = { [ ref( 'foo' ) ]: true };
+            const state = { [ $( 'foo' ) ]: true };
         `
     }, {
         title: 'don\'t used',

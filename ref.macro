@@ -24,14 +24,12 @@ function macro( { references, config } ) {
                     refState
                 )
             );
-            return;
         }
 
         if ( references.this$ ) {
             references.this$.forEach(
                 referencePath => thisRef( referencePath.parentPath, config, refState )
             );
-            return;
         }
 
         // After transpile with rollup in cjs import will:

@@ -30,7 +30,7 @@ pluginTester( {
     tests: [ {
         title: 'without args',
         code: `
-           
+
             import { $ } from '../../ref.macro';
 
             const foo = $();
@@ -47,7 +47,7 @@ pluginTester( {
         code: `
             import { $ } from '../../ref.macro';
 
-            const state = { [ $( 'foo' ) ]: true }; 
+            const state = { [ $( 'foo' ) ]: true };
         `
     }, {
         title: 'as member',
@@ -61,12 +61,12 @@ pluginTester( {
         code: `
             import { $ } from '../../ref.macro';
 
-            const state = { [ $.foo ]: true }; 
+            const state = { [ $.foo ]: true };
         `
     }, {
         title: 'cjs without args',
         code: `
-           
+
             import babel_macro from '../../ref.macro';
 
             const foo = babel_macro.$();
@@ -83,7 +83,7 @@ pluginTester( {
         code: `
             import babel_macro from '../../ref.macro';
 
-            const state = { [ babel_macro.$( 'foo' ) ]: true }; 
+            const state = { [ babel_macro.$( 'foo' ) ]: true };
         `
     }, {
         title: 'cjs as member',
@@ -97,7 +97,7 @@ pluginTester( {
         code: `
             import babel_macro from '../../ref.macro';
 
-            const state = { [ babel_macro.$.foo ]: true }; 
+            const state = { [ babel_macro.$.foo ]: true };
         `
     }, {
         title: 'this$ assign',
@@ -131,6 +131,23 @@ pluginTester( {
         title: 'don\'t used',
         code: `
             import '../../ref.macro';
+        `
+    }, {
+        title: '$ & this$',
+        code: `
+        import { this$, $ } from '../../ref.macro';
+
+        function App( options, update ) {
+            const firstGroup = $();
+    
+            const state = options( {
+                [ firstGroup ]: true,
+            } );
+    
+            this$.toggleGroup = () => update( {
+                [ firstGroup ]: !state[ firstGroup ]
+            } );
+        }
         `
     } ]
 } );
