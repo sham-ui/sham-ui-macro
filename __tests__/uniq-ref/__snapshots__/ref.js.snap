@@ -60,6 +60,22 @@ const state = { [0]: true };
 
 `;
 
+exports[`macros cjs pass object as argument: cjs pass object as argument 1`] = `
+
+import babel_macro from '../../ref.macro';
+
+const state = babel_macro.$( { foo: 'foo', bar: 1 + 3, baz: this.func( 42 ) } );
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const state = {
+  0: 'foo',
+  1: 1 + 3,
+  2: this.func(42)
+};
+
+`;
+
 exports[`macros cjs this$ assign: cjs this$ assign 1`] = `
 
 import babel_macro from '../../ref.macro';
@@ -127,6 +143,22 @@ const state = { [ $.foo ]: true };
       ↓ ↓ ↓ ↓ ↓ ↓
 
 const state = { [0]: true };
+
+`;
+
+exports[`macros pass object as argument: pass object as argument 1`] = `
+
+import { $ } from '../../ref.macro';
+
+const state = $( { foo: 'foo', bar: 1 + 3, baz: this.func( 42 ) } );
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const state = {
+  0: 'foo',
+  1: 1 + 3,
+  2: this.func(42)
+};
 
 `;
 

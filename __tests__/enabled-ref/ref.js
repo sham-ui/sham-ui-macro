@@ -64,6 +64,13 @@ pluginTester( {
             const state = { [ $.foo ]: true };
         `
     }, {
+        title: 'pass object as argument',
+        code: `
+            import { $ } from '../../ref.macro';
+
+            const state = $( { foo: 'foo', bar: 1 + 3, baz: this.func( 42 ) } );
+        `
+    }, {
         title: 'cjs without args',
         code: `
 
@@ -126,6 +133,13 @@ pluginTester( {
             import babel_macro from '../../ref.macro';
 
             babel_macro.this$.foo( 1 );
+        `
+    }, {
+        title: 'cjs pass object as argument',
+        code: `
+            import babel_macro from '../../ref.macro';
+
+            const state = babel_macro.$( { foo: 'foo', bar: 1 + 3, baz: this.func( 42 ) } );
         `
     }, {
         title: 'don\'t used',

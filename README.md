@@ -103,7 +103,7 @@ Macro for get/generate uniq reference
 
 ##### Parameters
 
--   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** Name of reference
+-   `name` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object))?** Name of reference  or object for processing
 
 ##### Examples
 
@@ -125,6 +125,7 @@ const state = {
     [ lastName ]: 'Smith'
 }
 const fullName = state[ $( 'firstName' ) ] + state[ $.lastName ];
+const user = $( { firstName: 'John', lastName: 'Smith' } );
 
 // ↓ ↓ ↓ ↓ ↓ ↓
 
@@ -135,6 +136,7 @@ const state = {
     [ lastName ]: 'Smith'
 }
 const fullName = state[ 0 ] + state[ 1 ];
+const user = { 0: 'John', 1: 'Smith' };
 ```
 
 #### this$

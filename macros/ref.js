@@ -3,7 +3,7 @@ const t = require( 'babel-types' );
 /**
  * Macro for get/generate uniq reference
  * @function $
- * @param {string} [name] Name of reference
+ * @param {string|Object} [name] Name of reference  or object for processing
  *
  * @example
  * // Config in package.json
@@ -23,6 +23,7 @@ const t = require( 'babel-types' );
  *     [ lastName ]: 'Smith'
  * }
  * const fullName = state[ $( 'firstName' ) ] + state[ $.lastName ];
+ * const user = $( { firstName: 'John', lastName: 'Smith' } );
  *
  * // ↓ ↓ ↓ ↓ ↓ ↓
  *
@@ -33,6 +34,7 @@ const t = require( 'babel-types' );
  *     [ lastName ]: 'Smith'
  * }
  * const fullName = state[ 0 ] + state[ 1 ];
+ * const user = { 0: 'John', 1: 'Smith' };
  */
 
 /**
@@ -42,32 +44,49 @@ const t = require( 'babel-types' );
  * @private
  */
 function ref( expression, config, state ) {
-    const { uniq = false } = config;
-
     let name;
     if ( expression.isCallExpression() ) {
+        const args = expression.node.arguments;
+        if ( 1 === args.length && t.isObjectExpression( args[ 0 ] ) ) {
+            refObject( expression, config, state );
+            return;
+        }
         name = getNameFromCallExpression( expression );
     } else if ( expression.isMemberExpression() ) {
         name = getNameFromMemberExpression( expression );
     } else {
         throw new Error( `Unknown usage for ref macro, node.type == '${expression.node.type}'` );
     }
-
-    let identifier;
-    if ( uniq ) {
-        if ( !state.map.has( name ) ) {
-            state.map.set(
-                name,
-                state.map.size
-            );
-        }
-        identifier = t.NumericLiteral( state.map.get( name ) );
-    } else {
-        identifier = t.StringLiteral( name );
-    }
-
+    const identifier = getIdentifier( name, config, state );
     expression.replaceWith(
         identifier
+    );
+}
+
+/**
+ * @param {BabelPath} expression
+ * @param {Object} config
+ * @param {Object} state
+ * @private
+ */
+function refObject( expression, config, state ) {
+    expression.replaceWith(
+        t.objectExpression(
+            expression.node.arguments[ 0 ].properties.map( prop => {
+                if ( prop.computed ) {
+                    throw new Error( 'Don\'t allowed object with computed property' );
+                }
+                if ( !t.isIdentifier( prop.key ) ) {
+                    throw new Error(
+                        `Property is not Identifier, expected Identifier, receive ${prop.type}`
+                    );
+                }
+                return t.objectProperty(
+                    getIdentifier( prop.key.name, config, state ),
+                    prop.value
+                );
+            } )
+        )
     );
 }
 
@@ -93,24 +112,16 @@ function ref( expression, config, state ) {
  *
  * this[ 0 ] = e => {};
  */
+
+/**
+ * @param {BabelPath} expression
+ * @param {Object} config
+ * @param {Object} state
+ * @private
+ */
 function thisRef( expression, config, state ) {
-    const { uniq = false } = config;
-
     const name = getNameFromMemberExpression( expression );
-
-    let identifier;
-    if ( uniq ) {
-        if ( !state.map.has( name ) ) {
-            state.map.set(
-                name,
-                state.map.size
-            );
-        }
-        identifier = t.NumericLiteral( state.map.get( name ) );
-    } else {
-        identifier = t.StringLiteral( name );
-    }
-
+    const identifier = getIdentifier( name, config, state );
     expression.replaceWith(
         t.memberExpression(
             t.thisExpression(),
@@ -145,6 +156,20 @@ function getNameFromMemberExpression( expression ) {
     return property.name;
 }
 
+
+function getIdentifier( name, config, state ) {
+    const { uniq = false } = config;
+    if ( uniq ) {
+        if ( !state.map.has( name ) ) {
+            state.map.set(
+                name,
+                state.map.size
+            );
+        }
+        return t.NumericLiteral( state.map.get( name ) );
+    }
+    return t.StringLiteral( name );
+}
 
 module.exports = {
     ref,
